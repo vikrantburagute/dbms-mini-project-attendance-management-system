@@ -1,3 +1,5 @@
+DROP DATABASE IF EXISTS attendance_db;
+CREATE DATABASE attendance_db;
 USE attendance_db;
 
 CREATE TABLE students (
