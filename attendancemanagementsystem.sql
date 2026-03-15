@@ -24,11 +24,11 @@ CREATE TABLE teachers (
 
 CREATE TABLE attendance (
 	attendance_id INT PRIMARY KEY AUTO_INCREMENT, 
-    student_id INT,
-    subject_id INT,
-    teacher_id INT,
-    date DATE,
-    status ENUM('Present','Absent'),
+    student_id INT NOT NULL,
+    subject_id INT NOT NULL,
+    teacher_id INT NOT NULL,
+    date DATE NOT NULL,
+    status ENUM('Present','Absent') NOT NULL,
     FOREIGN KEY (student_id) REFERENCES students(student_id),
     FOREIGN KEY (subject_id) REFERENCES subjects(subject_id),
     FOREIGN KEY (teacher_id) REFERENCES teachers(teacher_id)
@@ -54,19 +54,18 @@ VALUES
 INSERT INTO teachers (teacher_name, email)
 VALUES
 ('Dr. Mehta', 'mehta@college.edu'),
-('Prof. Singh', 'singh@college.edu');
+('Prof. Singh', 'singh@college.edu'),
+('Prof. Joshi', 'joshi@college.edu'),
+('Dr. Kulkarni', 'kulkarni@college.edu');
 
 INSERT INTO attendance (student_id, subject_id, teacher_id, date, status)
 VALUES
-(1, 1, 1, '2026-03-02', 'Present'),
-(2, 1, 1, '2026-03-02', 'Present'),
-(3, 1, 1, '2026-03-02', 'Absent'),
-(1, 2, 2, '2026-03-01', 'Absent'),
-(2, 2, 2, '2026-03-01', 'Present'),
-(3, 2, 2, '2026-03-01', 'Present'),
-(1, 2, 2, '2026-03-02', 'Present'),
-(2, 2, 2, '2026-03-02', 'Absent'),
-(3, 2, 2, '2026-03-02', 'Present');
+(1, 3, 3, '2026-03-01', 'Present'),
+(2, 3, 3, '2026-03-01', 'Present'),
+(3, 3, 3, '2026-03-01', 'Absent'),
+(1, 4, 4, '2026-03-01', 'Present'),
+(2, 4, 4, '2026-03-01', 'Absent'),
+(3, 4, 4, '2026-03-01', 'Present');
 
 SELECT
 	s.roll_no,
@@ -79,3 +78,33 @@ FROM attendance a
 JOIN students s ON a.student_id = s.student_id
 JOIN subjects sub ON a.subject_id = sub.subject_id
 JOIN teachers t ON a.teacher_id = t.teacher_id;
+
+-- Update a student's semester
+UPDATE students
+SET semester = 4
+WHERE roll_no = 'SE001';
+
+-- Update attendance status
+UPDATE attendance
+SET status = 'Present'
+WHERE attendance_id = 2;
+
+-- Delete a specific attendance record
+DELETE FROM attendance
+WHERE attendance_id = 2;
+
+START TRANSACTION;
+
+INSERT INTO attendance (student_id, subject_id, teacher_id, date, status)
+VALUES (1, 1, 1, '2026-03-03', 'Present');
+
+SAVEPOINT after_insert;
+
+UPDATE attendance
+SET status = 'Absent'
+WHERE attendance_id = 1;
+
+ROLLBACK TO after_insert;
+
+COMMIT;
+
