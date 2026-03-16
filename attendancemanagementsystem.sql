@@ -68,16 +68,17 @@ VALUES
 (3, 4, 4, '2026-03-01', 'Present');
 
 SELECT
-	s.roll_no,
+    s.roll_no,
     s.name,
     sub.subject_name,
-    t.teacher_name,
-    a.date,
-    a.status
+    COUNT(*) AS total_classes,
+    SUM(a.status = 'Present') AS present_count,
+    ROUND(SUM(a.status = 'Present') * 100.0 / COUNT(*), 2) AS attendance_percentage
 FROM attendance a
 JOIN students s ON a.student_id = s.student_id
 JOIN subjects sub ON a.subject_id = sub.subject_id
-JOIN teachers t ON a.teacher_id = t.teacher_id;
+GROUP BY s.student_id, sub.subject_id;
+
 
 -- Update a student's semester
 UPDATE students
