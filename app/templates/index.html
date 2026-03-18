@@ -1,0 +1,28 @@
+<html>
+<head>
+    <title>Attendance Management System</title>
+</head>
+<body>
+    <h1>Attendance Report</h1>
+    <table border="1">
+        <tr>
+            <th>Roll No</th>
+            <th>Name</th>
+            <th>Subject</th>
+            <th>Teacher</th>
+            <th>Date</th>
+            <th>Status</th>
+        </tr>
+        {% for record in records %}
+        <tr>
+            <td>{{ record.roll_no }}</td>
+            <td>{{ record.name }}</td>
+            <td>{{ record.subject_name }}</td>
+            <td>{{ record.teacher_name }}</td>
+            <td>{{ record.date }}</td>
+            <td>{{ record.status }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+</body>
+</html>
