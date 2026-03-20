@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Mark Attendance</title>
+</head>
+<body>
+    <h1>Mark Attendance</h1>
+
+    {% if success %}
+    <p>Attendance marked successfully!</p>
+    {% endif %}
+
+    {% if error %}
+    <p style="color:red;">{{ error }}</p>
+    {% endif %}
+
+    <form method="POST">
+        <label>Student:</label>
+        <select name="student_id">
+            {% for student in students %}
+            <option value="{{ student.student_id }}">{{ student.roll_no }} - {{ student.name }}</option>
+            {% endfor %}
+        </select>
+        <br><br>
+
+        <label>Subject:</label>
+        <select name="subject_id">
+            {% for subject in subjects %}
+            <option value="{{ subject.subject_id }}">{{ subject.subject_name }}</option>
+            {% endfor %}
+        </select>
+        <br><br>
+
+        <label>Teacher:</label>
+        <select name="teacher_id">
+            {% for teacher in teachers %}
+            <option value="{{ teacher.teacher_id }}">{{ teacher.teacher_name }}</option>
+            {% endfor %}
+        </select>
+        <br><br>
+
+        <label>Date:</label>
+        <input type="date" name="date">
+        <br><br>
+
+        <label>Status:</label>
+        <select name="status">
+            <option value="Present">Present</option>
+            <option value="Absent">Absent</option>
+        </select>
+        <br><br>
+
+        <button type="submit">Mark Attendance</button>
+    </form>
+
+    <a href="/">Back to Home</a>
+</body>
+</html>

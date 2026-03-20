@@ -1,31 +1,36 @@
+<!DOCTYPE html>
 <html>
 <head>
-    <title>Attendance Management System</title>
+    <title>Student Attendance Lookup</title>
 </head>
 <body>
-    <h1>Attendance Report</h1>
-    <a href="/student">Check Student's Attendance</a>
-    <a href="/defaulters">Defaulters List</a>
-    <a href="/mark">Mark Attendance</a>
+    <h1>Student Attendance Lookup</h1>
+    <form method="POST">
+        <input type="text" name="roll_no" placeholder="Enter Roll Number">
+        <button type="submit">Search</button>
+    </form>
+
+    {% if records %}
     <table border="1">
         <tr>
-            <th>Roll No</th>
             <th>Name</th>
             <th>Subject</th>
-            <th>Teacher</th>
             <th>Date</th>
             <th>Status</th>
         </tr>
         {% for record in records %}
         <tr>
-            <td>{{ record.roll_no }}</td>
             <td>{{ record.name }}</td>
             <td>{{ record.subject_name }}</td>
-            <td>{{ record.teacher_name }}</td>
             <td>{{ record.date }}</td>
             <td>{{ record.status }}</td>
         </tr>
         {% endfor %}
     </table>
+    {% else %}
+    <p>No records found.</p>
+    {% endif %}
+
+    <a href="/">Back to Home</a>
 </body>
 </html>
