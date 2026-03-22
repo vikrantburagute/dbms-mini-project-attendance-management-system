@@ -32,3 +32,10 @@ pip install flask mysql-connector-python python-dotenv
 5. Run the app:
 python app.py
 6. Open `http://127.0.0.1:5000` in your browser
+
+## Planned Features
+- Dual verification attendance — confirmed only when both student and teacher mark independently
+- Login system with separate teacher and student roles
+- Attendance percentage dashboard with charts
+- Email alerts for students falling below 75%
+- Mobile responsive design
