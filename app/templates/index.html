@@ -1,31 +1,52 @@
+<!DOCTYPE html>
 <html>
 <head>
     <title>Attendance Management System</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
 <body>
-    <h1>Attendance Report</h1>
-    <a href="/student">Check Student's Attendance</a>
-    <a href="/defaulters">Defaulters List</a>
-    <a href="/mark">Mark Attendance</a>
-    <table border="1">
-        <tr>
-            <th>Roll No</th>
-            <th>Name</th>
-            <th>Subject</th>
-            <th>Teacher</th>
-            <th>Date</th>
-            <th>Status</th>
-        </tr>
-        {% for record in records %}
-        <tr>
-            <td>{{ record.roll_no }}</td>
-            <td>{{ record.name }}</td>
-            <td>{{ record.subject_name }}</td>
-            <td>{{ record.teacher_name }}</td>
-            <td>{{ record.date }}</td>
-            <td>{{ record.status }}</td>
-        </tr>
-        {% endfor %}
-    </table>
+    <nav class="navbar navbar-dark bg-dark px-4">
+        <a class="navbar-brand fw-bold" href="/">Attendance MS</a>
+        <div>
+            <a href="/" class="btn btn-outline-light btn-sm me-2">Home</a>
+            <a href="/student" class="btn btn-outline-light btn-sm me-2">Student Lookup</a>
+            <a href="/defaulters" class="btn btn-outline-light btn-sm me-2">Defaulters</a>
+            <a href="/mark" class="btn btn-outline-light btn-sm">Mark Attendance</a>
+        </div>
+    </nav>
+
+    <div class="container mt-4">
+        <h2 class="mb-4">Attendance Report</h2>
+        <table class="table table-bordered table-hover table-striped">
+            <thead class="table-dark">
+                <tr>
+                    <th>Roll No</th>
+                    <th>Name</th>
+                    <th>Subject</th>
+                    <th>Teacher</th>
+                    <th>Date</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for record in records %}
+                <tr>
+                    <td>{{ record.roll_no }}</td>
+                    <td>{{ record.name }}</td>
+                    <td>{{ record.subject_name }}</td>
+                    <td>{{ record.teacher_name }}</td>
+                    <td>{{ record.date }}</td>
+                    <td>
+                        {% if record.status == 'Present' %}
+                        <span class="badge bg-success">Present</span>
+                        {% else %}
+                        <span class="badge bg-danger">Absent</span>
+                        {% endif %}
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
 </body>
 </html>
