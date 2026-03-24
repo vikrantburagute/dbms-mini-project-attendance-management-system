@@ -31,6 +31,15 @@ CREATE TABLE attendance (
     FOREIGN KEY (subject_id) REFERENCES subjects(subject_id),
     FOREIGN KEY (teacher_id) REFERENCES teachers(teacher_id)
 );
+
+CREATE TABLE users (
+    user_id INT PRIMARY KEY AUTO_INCREMENT,
+    username VARCHAR(50) UNIQUE NOT NULL,
+    password VARCHAR(255) NOT NULL,
+    role ENUM('teacher', 'student') NOT NULL,
+    ref_id INT NOT NULL
+);
+
 ALTER TABLE attendance
 ADD CONSTRAINT unique_attendance
 UNIQUE (student_id, subject_id, date);
@@ -82,6 +91,14 @@ VALUES
 (1, 4, 4, '2026-03-02', 'Present'),
 (2, 4, 4, '2026-03-02', 'Present'),
 (3, 4, 4, '2026-03-02', 'Absent');
+
+INSERT INTO users (username, password, role, ref_id)
+VALUES
+('rahul', 'pass123', 'student', 1),
+('priya', 'pass123', 'student', 2),
+('amit', 'pass123', 'student', 3),
+('mehta', 'pass123', 'teacher', 1),
+('singh', 'pass123', 'teacher', 2);
 
 -- QUERIES
 -- Full attendance report
@@ -158,7 +175,7 @@ ROLLBACK TO after_insert;
 COMMIT;
 
 -- DCL
-CREATE USER 'teacher'@'localhost' IDENTIFIED BY 'password123';
+CREATE USER IF NOT EXISTS 'teacher'@'localhost' IDENTIFIED BY 'password123';
 GRANT SELECT, INSERT ON attendance_db.attendance TO 'teacher'@'localhost';
 REVOKE INSERT ON attendance_db.attendance FROM 'teacher'@'localhost';
 

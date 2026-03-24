@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, redirect, url_for, session 
 import mysql.connector
 from dotenv import load_dotenv
 import os
@@ -6,6 +6,17 @@ import os
 load_dotenv()
 
 app = Flask(__name__)
+app.secret_key = os.getenv("SECRET_KEY")
+
+from functools import wraps
+
+def login_required(f):
+    @wraps(f)
+    def decorated_function(*args, **kwargs):
+        if "user_id" not in session:
+            return redirect(url_for("login"))
+        return f(*args, **kwargs)
+    return decorated_function
 
 db = mysql.connector.connect(
     host=os.getenv("DB_HOST"),
@@ -16,6 +27,7 @@ db = mysql.connector.connect(
 )
 
 @app.route("/")
+@login_required
 def home():
     cursor = db.cursor(dictionary=True)
     cursor.execute("""
@@ -29,6 +41,7 @@ def home():
     return render_template("index.html", records=records)
 
 @app.route("/student", methods=["GET", "POST"])
+@login_required
 def student():
     records = []
     if request.method == "POST":
@@ -40,6 +53,7 @@ def student():
     return render_template("student.html", records=records)
 
 @app.route("/defaulters")
+@login_required
 def defaulters():
     cursor = db.cursor(dictionary=True)
     cursor.execute("""
@@ -58,6 +72,7 @@ def defaulters():
     return render_template("defaulters.html", defaulters=defaulters)
 
 @app.route("/mark", methods=["GET", "POST"])
+@login_required
 def mark():
     cursor = db.cursor(dictionary=True)
     success = False
@@ -87,6 +102,30 @@ def mark():
     teachers = cursor.fetchall()
 
     return render_template("mark.html", students=students, subjects=subjects, teachers=teachers, success=success, error=error)
+
+@app.route("/login", methods=["GET", "POST"])
+def login():
+    error = None
+    if request.method == "POST":
+        username = request.form["username"]
+        password = request.form["password"]
+        cursor = db.cursor(dictionary=True)
+        cursor.execute("SELECT * FROM users WHERE username = %s AND password = %s", (username, password))
+        user = cursor.fetchone()
+        if user:
+            session["user_id"] = user["user_id"]
+            session["username"] = user["username"]
+            session["role"] = user["role"]
+            session["ref_id"] = user["ref_id"]
+            return redirect(url_for("home"))
+        else:
+            error = "Invalid username or password."
+    return render_template("login.html", error=error)
+
+@app.route("/logout")
+def logout():
+    session.clear()
+    return redirect(url_for("login"))
 
 if __name__ == "__main__":
     app.run(debug=True)
