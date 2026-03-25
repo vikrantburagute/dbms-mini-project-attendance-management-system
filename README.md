@@ -3,12 +3,13 @@
 A full-stack web application to manage and track student attendance, built as a DBMS mini project. Designed with a dual verification system where both students and teachers mark attendance independently, eliminating proxy attendance and missed markings.
 
 ## Tech Stack
-- **Frontend:** HTML, CSS (Bootstrap - coming soon)
+- **Frontend:** HTML, CSS, Bootstrap
 - **Backend:** Python, Flask
 - **Database:** MySQL
 
 ## Features
 - Full attendance report with student, subject and teacher details
+- Login system with separate teacher and student roles 
 - Student lookup — search attendance history by roll number
 - Defaulters list — auto generated list of students below 75% attendance
 - Mark attendance — with duplicate entry protection
