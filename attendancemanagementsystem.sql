@@ -47,23 +47,33 @@ UNIQUE (student_id, subject_id, date);
 -- SAMPLE DATA
 INSERT INTO students (roll_no, name, department, semester)
 VALUES
-('SE001', 'Rahul Sharma', 'Computer', 3),
-('SE002', 'Priya Patel', 'Computer', 3),
-('SE003', 'Amit Verma', 'Computer', 3);
+('D13', 'VSB', 'Computer', 4),
+('E64', 'CSK', 'Computer', 4),
+('F42', 'DGM', 'Computer', 4),
+('E01', 'Aarav Sharma', 'Computer', 4),
+('E02', 'Priya Desai', 'Computer', 4),
+('E03', 'Rohit Patil', 'Computer', 4),
+('E04', 'Sneha Joshi', 'Computer', 4),
+('E05', 'Arjun Kulkarni', 'Computer', 4),
+('E06', 'Pooja Nair', 'Computer', 4),
+('E07', 'Vivek Mehta', 'Computer', 4),
+('E08', 'Anjali Pawar', 'Computer', 4),
+('E09', 'Karan Rane', 'Computer', 4),
+('E10', 'Neha Gaikwad', 'Computer', 4);
 
 INSERT INTO subjects (subject_name, subject_code)
 VALUES
-('DBMS', 'CS301'),
-('IOT', 'CS302'),
-('CO&MP', 'CS303'),
-('DM', 'CS304');
+('Database Management Systems', 'CS401'),
+('Internet of Things', 'CS402'),
+('Computer Organisation & Microprocessor', 'CS403'),
+('Discrete Mathematics', 'CS404');
 
 INSERT INTO teachers (teacher_name, email)
 VALUES
-('Dr. Mehta', 'mehta@college.edu'),
-('Prof. Singh', 'singh@college.edu'),
-('Prof. Joshi', 'joshi@college.edu'),
-('Dr. Kulkarni', 'kulkarni@college.edu');
+('ask', 'ask@college.edu'),
+('ss', 'ss@college.edu'),
+('nj', 'nj@college.edu'),
+('sk', 'sk@college.edu');
 
 INSERT INTO attendance (student_id, subject_id, teacher_id, date, status)
 VALUES
@@ -94,11 +104,20 @@ VALUES
 
 INSERT INTO users (username, password, role, ref_id)
 VALUES
-('rahul', 'pass123', 'student', 1),
+('aarav', 'pass123', 'student', 1),
 ('priya', 'pass123', 'student', 2),
-('amit', 'pass123', 'student', 3),
-('mehta', 'pass123', 'teacher', 1),
-('singh', 'pass123', 'teacher', 2);
+('rohit', 'pass123', 'student', 3),
+('sneha', 'pass123', 'student', 4),
+('arjun', 'pass123', 'student', 5),
+('pooja', 'pass123', 'student', 6),
+('vivek', 'pass123', 'student', 7),
+('anjali', 'pass123', 'student', 8),
+('karan', 'pass123', 'student', 9),
+('neha', 'pass123', 'student', 10),
+('ask', 'pass123', 'teacher', 1),
+('ss', 'pass123', 'teacher', 2),
+('nj', 'pass123', 'teacher', 3),
+('sk', 'pass123', 'teacher', 4);
 
 -- QUERIES
 -- Full attendance report
