@@ -2,21 +2,12 @@ from flask import Flask, render_template, request, redirect, url_for, session
 import mysql.connector
 from dotenv import load_dotenv
 import os
+from functools import wraps
 
 load_dotenv()
 
 app = Flask(__name__)
 app.secret_key = os.getenv("SECRET_KEY")
-
-from functools import wraps
-
-def login_required(f):
-    @wraps(f)
-    def decorated_function(*args, **kwargs):
-        if "user_id" not in session:
-            return redirect(url_for("login"))
-        return f(*args, **kwargs)
-    return decorated_function
 
 db = mysql.connector.connect(
     host=os.getenv("DB_HOST"),
@@ -26,19 +17,42 @@ db = mysql.connector.connect(
     use_pure=True
 )
 
+def login_required(f):
+    @wraps(f)
+    def decorated_function(*args, **kwargs):
+        if "user_id" not in session:
+            return redirect(url_for("login"))
+        return f(*args, **kwargs)
+    return decorated_function
+
 @app.route("/")
 @login_required
 def home():
     cursor = db.cursor(dictionary=True)
-    cursor.execute("""
-        SELECT s.roll_no, s.name, sub.subject_name, t.teacher_name, a.date, a.status
-        FROM attendance a
-        JOIN students s ON a.student_id = s.student_id
-        JOIN subjects sub ON a.subject_id = sub.subject_id
-        JOIN teachers t ON a.teacher_id = t.teacher_id
-    """)
-    records = cursor.fetchall()
-    return render_template("index.html", records=records)
+    print("ref_id:", session["ref_id"])
+    print("username:", session["username"])
+    print("role:", session["role"])
+    if session["role"] == "teacher":
+        cursor.execute("""
+            SELECT s.roll_no, s.name, sub.subject_name, t.teacher_name, a.date, a.status
+            FROM attendance a
+            JOIN students s ON a.student_id = s.student_id
+            JOIN subjects sub ON a.subject_id = sub.subject_id
+            JOIN teachers t ON a.teacher_id = t.teacher_id
+        """)
+        records = cursor.fetchall()
+        return render_template("index.html", records=records, role="teacher")
+    else:
+        cursor.execute("""
+            SELECT s.roll_no, s.name, sub.subject_name, t.teacher_name, a.date, a.status
+            FROM attendance a
+            JOIN students s ON a.student_id = s.student_id
+            JOIN subjects sub ON a.subject_id = sub.subject_id
+            JOIN teachers t ON a.teacher_id = t.teacher_id
+            WHERE s.student_id = %s
+        """, (session["ref_id"],))
+        records = cursor.fetchall()
+        return render_template("index.html", records=records, role="student")
 
 @app.route("/student", methods=["GET", "POST"])
 @login_required
@@ -50,7 +64,7 @@ def student():
         cursor.callproc("GetStudentAttendance", [roll_no])
         for result in cursor.stored_results():
             records = result.fetchall()
-    return render_template("student.html", records=records)
+    return render_template("student.html", records=records, role=session["role"])
 
 @app.route("/defaulters")
 @login_required
@@ -69,7 +83,7 @@ def defaulters():
         HAVING attendance_percentage < 75
     """)
     defaulters = cursor.fetchall()
-    return render_template("defaulters.html", defaulters=defaulters)
+    return render_template("defaulters.html", defaulters=defaulters, role=session["role"])
 
 @app.route("/mark", methods=["GET", "POST"])
 @login_required
@@ -101,7 +115,7 @@ def mark():
     cursor.execute("SELECT teacher_id, teacher_name FROM teachers")
     teachers = cursor.fetchall()
 
-    return render_template("mark.html", students=students, subjects=subjects, teachers=teachers, success=success, error=error)
+    return render_template("mark.html", students=students, subjects=subjects, teachers=teachers, success=success, error=error, role=session["role"])
 
 @app.route("/login", methods=["GET", "POST"])
 def login():

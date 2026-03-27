@@ -6,16 +6,18 @@
 </head>
 <body>
     <nav class="navbar navbar-dark bg-dark px-4">
-        <a class="navbar-brand fw-bold" href="/">Attendance MS</a>
-        <span class="text-white-50 small ms-2">{{ session.username }}</span>
-        <div>
-            <a href="/" class="btn btn-outline-light btn-sm me-2">Home</a>
-            <a href="/student" class="btn btn-outline-light btn-sm me-2">Student Lookup</a>
-            <a href="/defaulters" class="btn btn-outline-light btn-sm me-2">Defaulters</a>
-            <a href="/mark" class="btn btn-outline-light btn-sm">Mark Attendance</a>
-            <a href="/logout" class="btn btn-outline-danger btn-sm ms-2">Logout</a>
-        </div>
-    </nav>
+    <a class="navbar-brand fw-bold" href="/">Attendance MS</a>
+    <span class="text-white-50 small ms-2">{{ session.username }}</span>
+    <div>
+        <a href="/" class="btn btn-outline-light btn-sm me-2">Home</a>
+        {% if role == "teacher" %}
+        <a href="/student" class="btn btn-outline-light btn-sm me-2">Student Lookup</a>
+        <a href="/defaulters" class="btn btn-outline-light btn-sm me-2">Defaulters</a>
+        <a href="/mark" class="btn btn-outline-light btn-sm me-2">Mark Attendance</a>
+        {% endif %}
+        <a href="/logout" class="btn btn-outline-danger btn-sm ms-2">Logout</a>
+    </div>
+</nav>
 
     <div class="container mt-4">
         <h2 class="mb-4">Defaulters List <span class="badge bg-danger">Below 75%</span></h2>
