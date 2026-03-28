@@ -29,9 +29,6 @@ def login_required(f):
 @login_required
 def home():
     cursor = db.cursor(dictionary=True)
-    print("ref_id:", session["ref_id"])
-    print("username:", session["username"])
-    print("role:", session["role"])
     if session["role"] == "teacher":
         cursor.execute("""
             SELECT s.roll_no, s.name, sub.subject_name, t.teacher_name, a.date, a.status
@@ -69,6 +66,8 @@ def student():
 @app.route("/defaulters")
 @login_required
 def defaulters():
+    if session["role"] != "teacher":
+        return redirect(url_for("home"))
     cursor = db.cursor(dictionary=True)
     cursor.execute("""
         SELECT
@@ -88,6 +87,8 @@ def defaulters():
 @app.route("/mark", methods=["GET", "POST"])
 @login_required
 def mark():
+    if session["role"] != "teacher":
+        return redirect(url_for("home"))
     cursor = db.cursor(dictionary=True)
     success = False
     error = None
