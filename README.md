@@ -1,18 +1,18 @@
 # Attendance Management System
 
-A full-stack web application to manage and track student attendance, built as a DBMS mini project. Designed with a dual verification system where both students and teachers mark attendance independently, eliminating proxy attendance and missed markings.
+A full-stack web application to manage and track student attendance, built as a DBMS mini project. Is being developed with a dual verification system where both students and teachers mark attendance independently, eliminating proxy attendance and missed markings.
 
 ## Tech Stack
-- **Frontend:** HTML, CSS, Bootstrap
+- **Frontend:** HTML, Bootstrap 5
 - **Backend:** Python, Flask
 - **Database:** MySQL
 
 ## Features
-- Full attendance report with student, subject and teacher details
-- Login system with separate teacher and student roles 
-- Student lookup — search attendance history by roll number
+- Role based login — teachers and students see different views
+- Teachers: full attendance report, student lookup, defaulters list, mark attendance
+- Students: personal attendance report on login
 - Defaulters list — auto generated list of students below 75% attendance
-- Mark attendance — with duplicate entry protection
+- Duplicate attendance protection
 - Dual verification system — attendance confirmed only when both student and teacher mark (in progress)
 
 ## Database
@@ -34,9 +34,14 @@ pip install flask mysql-connector-python python-dotenv
 python app.py
 6. Open `http://127.0.0.1:5000` in your browser
 
-## Planned Features
+## Sample Login Credentials
+| Username | Password | Role |
+|----------|----------|------|
+| aarav | pass123 | Student |
+| nj | pass123 | Teacher |
+
+## WIP
 - Dual verification attendance — confirmed only when both student and teacher mark independently
-- Login system with separate teacher and student roles
 - Attendance percentage dashboard with charts
 - Email alerts for students falling below 75%
 - Mobile responsive design
