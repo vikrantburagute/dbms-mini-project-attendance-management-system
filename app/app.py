@@ -38,7 +38,7 @@ def home():
             JOIN teachers t ON a.teacher_id = t.teacher_id
         """)
         records = cursor.fetchall()
-        return render_template("index.html", records=records, role="teacher")
+        return render_template("index.html", records=records, role="teacher", percentages=[])
     else:
         cursor.execute("""
             SELECT s.roll_no, s.name, sub.subject_name, t.teacher_name, a.date, a.status
@@ -49,11 +49,24 @@ def home():
             WHERE s.student_id = %s
         """, (session["ref_id"],))
         records = cursor.fetchall()
-        return render_template("index.html", records=records, role="student")
+
+        cursor.execute("""
+            SELECT sub.subject_name,
+            ROUND(SUM(a.status = 'Present') * 100.0 / COUNT(*), 2) AS attendance_percentage
+            FROM attendance a
+            JOIN subjects sub ON a.subject_id = sub.subject_id
+            WHERE a.student_id = %s
+            GROUP BY sub.subject_id
+        """, (session["ref_id"],))
+        percentages = cursor.fetchall()
+
+        return render_template("index.html", records=records, percentages=percentages, role="student")
 
 @app.route("/student", methods=["GET", "POST"])
 @login_required
 def student():
+    if session["role"] != "teacher":
+        return redirect(url_for("home"))
     records = []
     if request.method == "POST":
         roll_no = request.form["roll_no"]

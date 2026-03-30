@@ -51,6 +51,31 @@
                 {% endfor %}
             </tbody>
         </table>
+        {% if role == "student" %}
+<h4 class="mt-4 mb-3">Attendance Summary</h4>
+<table class="table table-bordered table-hover w-50">
+    <thead class="table-dark">
+        <tr>
+            <th>Subject</th>
+            <th>Attendance %</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for p in percentages %}
+        <tr>
+            <td>{{ p.subject_name }}</td>
+            <td>
+                {% if p.attendance_percentage < 75 %}
+                <span class="badge bg-danger">{{ p.attendance_percentage }}%</span>
+                {% else %}
+                <span class="badge bg-success">{{ p.attendance_percentage }}%</span>
+                {% endif %}
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endif %}
     </div>
 </body>
 </html>
